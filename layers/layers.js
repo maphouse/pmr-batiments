@@ -1,66 +1,146 @@
-var wms_layers = [];
+class MapLayer {
 
+    constructor(container_id, height, width) {
+        this.container_id = container_id;
+        this.height = height;
+        this.width = width;
+        this.map = null;  
+    }
+    
+    init_map(center = [0, 0], zoom = 2,style = 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json') {
+        document.getElementById(this.container_id).style.height = this.height;
+        document.getElementById(this.container_id).style.width = this.width;
 
-        var lyr_OSMStandard_0 = new ol.layer.Tile({
-            'title': 'OSM Standard',
-            //'type': 'base',
-            'opacity': 1.000000,
-            
-            
-            source: new ol.source.XYZ({
-    attributions: ' &middot; <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors, CC-BY-SA</a>',
-                url: 'http://tile.openstreetmap.org/{z}/{x}/{y}.png'
-            })
+        this.map = new maplibregl.Map({
+            container: this.container_id,  
+            style: style,  
+            center: center,  
+            zoom: zoom  
         });
-var format_Annedeconstruction_1 = new ol.format.GeoJSON();
-var features_Annedeconstruction_1 = format_Annedeconstruction_1.readFeatures(json_Annedeconstruction_1, 
-            {dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
-var jsonSource_Annedeconstruction_1 = new ol.source.Vector({
-    attributions: ' ',
-});
-jsonSource_Annedeconstruction_1.addFeatures(features_Annedeconstruction_1);
-var lyr_Annedeconstruction_1 = new ol.layer.Vector({
-                declutter: false,
-                source:jsonSource_Annedeconstruction_1, 
-                style: style_Annedeconstruction_1,
-                popuplayertitle: "Unité d'évaluation foncière",
-                interactive: true,
-    title: 'Année de construction<br />\
-    <img src="styles/legend/Annedeconstruction_1_0.png" /> --------- 1866<br />\
-    <img src="styles/legend/Annedeconstruction_1_1.png" /> 1866 - 1879<br />\
-    <img src="styles/legend/Annedeconstruction_1_2.png" /> 1880 - 1899<br />\
-    <img src="styles/legend/Annedeconstruction_1_3.png" /> 1900 - 1917<br />\
-    <img src="styles/legend/Annedeconstruction_1_4.png" /> 1918 - 1934<br />\
-    <img src="styles/legend/Annedeconstruction_1_5.png" /> 1935 - 1943<br />\
-    <img src="styles/legend/Annedeconstruction_1_6.png" /> 1944 - 1959<br />\
-    <img src="styles/legend/Annedeconstruction_1_7.png" /> 1960 - 2024<br />'
-        });
-var group_Unitsdvaluationfoncire = new ol.layer.Group({
-                                layers: [lyr_Annedeconstruction_1,],
-                                fold: "open",
-                                title: "Unités d'évaluation foncière"});
-var group_misc = new ol.layer.Group({
-                                layers: [],
-                                fold: "open",
-                                title: "misc"});
-var group_DAs = new ol.layer.Group({
-                                layers: [],
-                                fold: "open",
-                                title: "DAs"});
-var group_stm = new ol.layer.Group({
-                                layers: [],
-                                fold: "open",
-                                title: "stm"});
-var group_basemap = new ol.layer.Group({
-                                layers: [],
-                                fold: "open",
-                                title: "basemap"});
+ 
+    }
+ 
+    add_building_layer(source_id, layer_id, data) {
+        
+        //console.log(data)
 
-lyr_OSMStandard_0.setVisible(true);lyr_Annedeconstruction_1.setVisible(true);
-var layersList = [lyr_OSMStandard_0,group_Unitsdvaluationfoncire];
-lyr_Annedeconstruction_1.set('fieldAliases', {'fid': 'fid', 'ID_UEV': 'ID_UEV', 'CIVIQUE_DE': 'CIVIQUE_DE', 'CIVIQUE_FI': 'CIVIQUE_FI', 'NOM_RUE': 'NOM_RUE', 'SUITE_DEBU': 'SUITE_DEBU', 'MUNICIPALI': 'MUNICIPALI', 'ETAGE_HORS': 'ETAGE_HORS', 'NOMBRE_LOG': 'NOMBRE_LOG', 'ANNEE_CONS': 'ANNEE_CONS', 'CODE_UTILI': 'CODE_UTILI', 'LETTRE_DEB': 'LETTRE_DEB', 'LETTRE_FIN': 'LETTRE_FIN', 'LIBELLE_UT': 'LIBELLE_UT', 'CATEGORIE_': 'CATEGORIE_', 'MATRICULE8': 'MATRICULE8', 'SUPERFICIE': 'SUPERFICIE', 'SUPERFIC_1': 'SUPERFIC_1', 'NO_ARROND_': 'NO_ARROND_', });
-lyr_Annedeconstruction_1.set('fieldImages', {'fid': 'TextEdit', 'ID_UEV': 'Hidden', 'CIVIQUE_DE': 'TextEdit', 'CIVIQUE_FI': 'TextEdit', 'NOM_RUE': 'TextEdit', 'SUITE_DEBU': 'TextEdit', 'MUNICIPALI': 'Hidden', 'ETAGE_HORS': 'TextEdit', 'NOMBRE_LOG': 'TextEdit', 'ANNEE_CONS': 'TextEdit', 'CODE_UTILI': 'Hidden', 'LETTRE_DEB': 'Hidden', 'LETTRE_FIN': 'Hidden', 'LIBELLE_UT': 'TextEdit', 'CATEGORIE_': 'TextEdit', 'MATRICULE8': 'TextEdit', 'SUPERFICIE': 'TextEdit', 'SUPERFIC_1': 'TextEdit', 'NO_ARROND_': 'Hidden', });
-lyr_Annedeconstruction_1.set('fieldLabels', {'fid': 'inline label - always visible', 'CIVIQUE_DE': 'inline label - always visible', 'CIVIQUE_FI': 'inline label - always visible', 'NOM_RUE': 'inline label - always visible', 'SUITE_DEBU': 'inline label - always visible', 'ETAGE_HORS': 'inline label - always visible', 'NOMBRE_LOG': 'inline label - always visible', 'ANNEE_CONS': 'inline label - always visible', 'LIBELLE_UT': 'inline label - always visible', 'CATEGORIE_': 'inline label - always visible', 'MATRICULE8': 'inline label - always visible', 'SUPERFICIE': 'inline label - always visible', 'SUPERFIC_1': 'inline label - always visible', });
-lyr_Annedeconstruction_1.on('precompose', function(evt) {
-    evt.context.globalCompositeOperation = 'normal';
-});
+        // add manual id for now
+        data.features.forEach((feature, index) => {
+            if (!feature.id) {
+                feature.id = index;
+            }
+        });
+
+        this.map.addSource(source_id, {
+            type: 'geojson',
+            data: data
+        });
+ 
+        this.map.addLayer({
+            id: layer_id,
+            type: 'fill',
+            source: source_id,
+            paint: {
+                'fill-color': [
+                    'step',
+                    ['to-number', ['get', 'ANNEE_CONS']],
+                    'rgba(122,4,3,1.0)',   
+                    1866, 'rgba(217,56,7,1.0)',  
+                    1880, 'rgba(254,153,44,1.0)',  
+                    1900, 'rgba(211,232,53,1.0)',  
+                    1918, 'rgba(100,253,106,1.0)',  
+                    1935, 'rgba(27,208,213,1.0)',  
+                    1944, 'rgba(71,119,239,1.0)',  
+                    1960, 'rgba(193,193,193,1.0)',   
+                    9999, 'rgba(255,255,255,.5)'   
+                ],
+                'fill-opacity': [
+                    'case',
+                    ['==', ['to-number', ['get', 'ANNEE_CONS']], 9999],
+                    0.5,  
+                    1.0  
+                ],
+                'fill-outline-color': 'rgba(35,35,35,1.0)'
+            }
+        }); 
+
+        this.map.addLayer({
+            id: `${layer_id}-outline`,
+            type: 'line',
+            source: source_id,
+            paint: {
+                'line-color': 'rgba(35,35,35,1.0)',
+                'line-width': 0.5
+            }
+        });
+
+        // hover method
+        this.map.on('mouseenter', layer_id, () => {
+            this.map.getCanvas().style.cursor = 'pointer';
+        });
+    
+        this.map.on('mouseleave', layer_id, () => {
+            this.map.getCanvas().style.cursor = '';
+        });
+
+        // click / popup method
+        this.map.on('click', layer_id, (e) => {
+            const coordinates = e.lngLat;
+            const properties = e.features[0].properties;
+            const popupContent = `
+                <div>
+                    <h3>Layer: Unité d'évaluation foncière</h3>
+                    <hr>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                        ${Object.entries(properties)
+                            .map(
+                                ([key, value]) => `
+                                    <tr>
+                                        <td style="padding: 4px 8px; "><strong>${key}</strong></td>
+                                        <td style="padding: 4px 8px; ">${value}</td>
+                                    </tr>
+                                `
+                            )
+                            .join('')}
+                    </table>
+                </div>
+            `;
+
+            new maplibregl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(popupContent)
+                .addTo(this.map);
+
+            if (this.selected_polygon_id !== null) {
+                this.map.setFeatureState(
+                    { source: source_id, id: this.selected_polygon_id },
+                    { selected: false }
+                );
+            }
+            console.log(e.features[0].id)
+            this.selected_polygon_id = e.features[0].id;
+            this.map.setFeatureState(
+                { source: source_id, id: this.selected_polygon_id },
+                { selected: true }
+            );
+        });
+
+        // add outline highlight layer with poly id
+        this.map.addLayer({
+            id: `${layer_id}-highlight`,
+            type: 'line',
+            source: source_id,
+            paint: {
+                'line-color': '#242424',
+                'line-width': [
+                    'case',
+                    ['boolean', ['feature-state', 'selected'], false],
+                     2,
+                    0
+                ]
+            }
+        });
+    
+    }
+  
+}
